@@ -1,2 +1,5 @@
 venv/
-grad_dec/testing.py
+test*
+*.pyc
+*.log
+data.csv
