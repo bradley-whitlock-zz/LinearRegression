@@ -10,38 +10,40 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 def line_error(theta, x_data, y_data):
     totalError = 0
     for i in range(0, len(x_data)):
-        x = x_data[i][1]
+        x = x_data[i]
         y = y_data[i]
         totalError += (y - hyp(theta, x)) ** 2
     return totalError / float(len(x_data))
 
+# Accepts x which is array of training data so can customize the form
 def hyp(theta, x):
-    return theta[0] * x + theta[1]
+    # Form y = mx + b
+    return theta[0] * x[1] + theta[1]
 
-def step_gradient(theta, x_data, y_data, learningRate): 
-    t_gradient = [0] * len(theta)
+def step_gradient(theta, x_data, y_data, learningRate, num_dimensions): 
+    t_gradient = 0
+    temp_theta = [0] * num_dimensions
     N = float(len(x_data))
-    for i in range(0, len(x_data)):
-        x = x_data[i][1]
-        y = y_data[i]
-        t_gradient[0] += x * (hyp(theta, x) - y)
-        t_gradient[1] += (hyp(theta, x) - y)
-    theta[1] = theta[1] - (learningRate * t_gradient[0])/N
-    theta[0] = theta[0] - (learningRate * t_gradient[1])/N
-    return theta
+    for j in range(0, num_dimensions):
+        for i in range(0, len(x_data)):
+            t_gradient += x_data[i][j] * (hyp(theta, x_data[i]) - y_data[i])
+        temp_theta[j] = theta[j] - (learningRate * t_gradient)/N
+    return temp_theta
 
-def gradient_descent_runner(x, y, theta, learning_rate, num_iterations):
+def gradient_descent_runner(x, y, theta, learning_rate, max_num_iterations, num_dimensions):
     last_error = line_error(theta, x, y)
+    last_t = [0] * num_dimensions
     count = 0
-    for i in range(num_iterations):
-        theta = step_gradient(theta, x, y, learning_rate)
+    for i in range(max_num_iterations):
+        theta = step_gradient(theta, x, y, learning_rate, num_dimensions)
         curr_error = line_error(theta, x, y)
         if last_error < curr_error:
             break
+        last_t = theta
         last_error = curr_error
         count += 1
     print "Number of itterations: ", count
-    return theta
+    return last_t
 
 def float_wrapper(reader):
     for v in reader:
@@ -75,10 +77,12 @@ def populate(file_name):
 
 def run():
     X, Y = populate('housing_data.csv')
-    # initial guess for the coefficients
-    theta = [0] * len(X[0])
-    learning_rate = 0.0005
-    max_num_iterations = 2000
+
+    num_dimensions = 2
+    theta = [0] * num_dimensions
+
+    learning_rate = 0.0003
+    max_num_iterations = 3000
 
     print X
     #X = feature_scale(X, 1)
@@ -86,14 +90,15 @@ def run():
 
     print "Running..."
 
-    theta = gradient_descent_runner(X, Y, theta, learning_rate, max_num_iterations)
+    theta = gradient_descent_runner(X, Y, theta, learning_rate, max_num_iterations, num_dimensions)
     x_plot = map(lambda x: x[1], X)
-    print x_plot
+    print 'Max xplot: ', max(x_plot)
     plt.plot(x_plot, Y, 'ro')
     x = np.array(range(0, int(max(x_plot) * 1.15)))
     formula = str(str(theta[1]) + '+' + str(theta[0]) + '*x')
     print formula   
     y = eval(formula)
+    #plt.axis([-2, 2, 0, 250])
     plt.plot(x, y)
     plt.show()
 
