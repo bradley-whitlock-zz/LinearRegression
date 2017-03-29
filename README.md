@@ -22,8 +22,8 @@ Open a new terminal and go to this project directory.
 ### Building project (dependencies)
 Install dependencies in an isolated environment like so:
 ```
-virtualenv ~/.virtualenvs/grad_reg
-source ~/.virtualenvs/grad_reg/bin/activate
+virtualenv ~/.virtualenvs/grad_dec
+source ~/.virtualenvs/grad_dec/bin/activate
 ./build.sh
 ```
 
