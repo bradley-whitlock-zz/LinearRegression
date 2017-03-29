@@ -17,8 +17,9 @@ def line_error(theta, x_data, y_data):
 
 # Accepts x which is array of training data so can customize the form
 def hyp(theta, x):
+    print x
     # Form y = mx + b
-    return theta[0] * x[1] +  theta[1]
+    return theta[0] * x[1] + theta[1] * x[2] + theta[2]
 
 def step_gradient(theta, x_data, y_data, learningRate, num_factors): 
     t_gradient = 0
@@ -72,15 +73,15 @@ def populate(file_name):
     return (X, Y)
 
 def run():
-    X, Y = populate('housing_data.csv')
+    X, Y = populate('housing_data_2.csv')
 
     # num_factors will always be 1 greater than the actual number of factors becasue of constant coeff
-    num_factors = 2
+    num_factors = 3
     theta = [0] * (num_factors)
 
     # Coeff's user sets
     learning_rate = 0.001
-    max_num_iterations = 100000
+    max_num_iterations = 10000
 
     print X
     #X = feature_scale(X, 1)
@@ -89,11 +90,13 @@ def run():
     print "Running..."
     theta = gradient_descent_runner(X, Y, theta, learning_rate, max_num_iterations, num_factors)
     
+
     x_plot = map(lambda x: x[1], X)
+    print x_plot
     #print 'Max xplot: ', max(x_plot)
     plt.plot(x_plot, Y, 'ro')
     x = np.array(range(0, int(max(x_plot) * 1.15)))
-    formula = str(str(theta[1]) + '+' + str(theta[0]) + '*x')
+    formula = str(str(theta[2]) + ' + ' + str(theta[1]) + ' * x + ' + str(theta[0]) + ' * x')
     print formula   
     y = eval(formula)
     #plt.axis([-2, 2, 0, 250])
