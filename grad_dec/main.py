@@ -17,7 +17,7 @@ def line_error(theta, x_data, y_data):
 
 # Accepts x which is array of training data so can customize the form
 def hyp(theta, x):
-    print x
+    #print x
     # Form y = mx + b
     return theta[0] * x[1] + theta[1] * x[2] + theta[2]
 
@@ -29,6 +29,7 @@ def step_gradient(theta, x_data, y_data, learningRate, num_factors):
         for i in range(0, len(x_data)):
             t_gradient += x_data[i][j] * (hyp(theta, x_data[i]) - y_data[i])
         temp_theta[j] = theta[j] - (learningRate * t_gradient)/N
+    t_gradient = 0 
     return temp_theta
 
 def gradient_descent_runner(x, y, theta, learning_rate, max_num_iterations, num_factors):
@@ -49,7 +50,6 @@ def float_wrapper(reader):
         # yeild used like return, returns generator (itterate once)
         yield map(float, v)
 
-# Improvment: use std. dev. rather than range
 def feature_scale(data, index):
     x_vals = map(lambda x: x[index], data)
     std_dev = np.std(x_vals)

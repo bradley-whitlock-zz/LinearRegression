@@ -1,6 +1,8 @@
-# Gradient Regression
+# Linear Regression
 
 ## Linear Regression with Gradient Descent Implementation
+
+## This repo was made as an introduction to the concepts of machine learning
 
 A python script to take input from CSV and find a relationship between data and yeild a plot
 
@@ -29,5 +31,5 @@ source ~/.virtualenvs/grad_dec/bin/activate
 
 ### Executing script
 ```
-python -m pipeline.main
+python -m grad_dec.main
 ```
